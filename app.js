@@ -3,12 +3,19 @@ const app = express();
 const connectDB = require('./db/connect')
 const notFound = require('./middlewares/not-found')
 const asyncWrapper = require('./middlewares/async.js')
-require('dotenv').config()
+const cors = require('cors');
+require('dotenv').config();
 
 //middleware
+app.use(
+    cors({
+        origin: "*",
+    })
+);
 
-app.use(express.static('./public'))
-app.use(express.json())
+app.use(express.static('./public'));
+
+app.use(express.json());
 
 //route
 const tasks = require('./routes/tasks')
@@ -17,7 +24,7 @@ app.use('/api/v1/tasks' , tasks )
 app.use(notFound)
 app.use(asyncWrapper)
 
-const port = 3000
+const port = process.env.PORT || 3000;
 
 const start = async () => {
     try {
